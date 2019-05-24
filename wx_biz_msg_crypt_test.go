@@ -41,10 +41,10 @@ func TestWxBizMsgCrypt(t *testing.T) {
 	}
 	t.Log(eMap)
 
-	j, err := c.DecryptMsg(eMap["MsgSignature"], timeStamp, nonce, eMap["Encrypt"])
+	jBytes, err := c.DecryptMsg(eMap["MsgSignature"], timeStamp, nonce, eMap["Encrypt"])
 	if err != nil {
 		panic(err)
 	}
 
-	t.Log(j)
+	t.Log(string(jBytes))
 }

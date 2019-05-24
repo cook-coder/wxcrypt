@@ -50,21 +50,21 @@ func (p *prpcrypt) encrypt(text string) (string, error) {
 }
 
 // 解密
-func (p *prpcrypt) decrypt(encrypt string) (string, error) {
+func (p *prpcrypt) decrypt(encrypt string) ([]byte, error) {
 	base64DecodeEncrypt, err := base64.StdEncoding.DecodeString(encrypt)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	aesKeyBytes, err := base64DecodeAesKey(p.AesKey)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	// aes解密
 	block, err := aes.NewCipher(aesKeyBytes)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	iv := aesKeyBytes[0:aes.BlockSize]
@@ -86,17 +86,15 @@ func (p *prpcrypt) decrypt(encrypt string) (string, error) {
 	// 截取APPID
 	fromAppID := pkcg7DecodedDecryptedMsg[contentEndAt:]
 	if string(fromAppID) != p.AppID {
-		return "", errors.New("app id does not match")
+		return nil, errors.New("app id does not match")
 	}
 
-	return string(content), nil
+	return content, nil
 }
 
 // 获取16位随机字符串
 func getRandomStrBytes() []byte {
 	strPool := []byte("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz")
-	return strPool[:16]
-	// TODO 正式要删除上面的代码
 	max := len(strPool) - 1
 	rand.Seed(time.Now().UnixNano())
 	var randBytes = make([]byte, 16, 16)
