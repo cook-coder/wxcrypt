@@ -16,10 +16,9 @@ type prpcrypt struct {
 }
 
 // 加密
-func (p *prpcrypt) encrypt(text string) (string, error) {
+func (p *prpcrypt) encrypt(textBytes []byte) (string, error) {
 	bytesColl := []byte{}
 	randBytes := getRandomStrBytes()
-	textBytes := []byte(text)
 	networkBytesOrder := getNetworkBytesOrder(len(textBytes))
 	// randomStr + networkBytesOrder + text + appid
 	bytesColl = append(randBytes, networkBytesOrder...)

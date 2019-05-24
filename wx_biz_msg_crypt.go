@@ -10,22 +10,16 @@ type WxCrypt struct {
 }
 
 // EncryptMsg 加密消息
-func (c *WxCrypt) EncryptMsg(msg, timestamp, nonce string) (map[string]string, error) {
+func (c *WxCrypt) EncryptMsg(msgBytes []byte, timestamp, nonce string) (string, error) {
 	p := prpcrypt{
 		AesKey: c.AesKey,
 		AppID:  c.AppID,
 	}
-	encryptMsg, err := p.encrypt(msg)
+	encryptMsg, err := p.encrypt(msgBytes)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
-	sha1Sign := GetSHA1(c.Token, timestamp, nonce, encryptMsg)
-	return map[string]string{
-		"Encrypt":      encryptMsg,
-		"MsgSignature": sha1Sign,
-		"TimeStamp":    timestamp,
-		"Nonce":        nonce,
-	}, nil
+	return encryptMsg, nil
 }
 
 // DecryptMsg 解密消息

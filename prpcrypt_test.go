@@ -13,7 +13,7 @@ func TestEncrypt(t *testing.T) {
 		AppID:  appID,
 		AesKey: "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFG",
 	}
-	encrypt, err := p.encrypt(xml)
+	encrypt, err := p.encrypt([]byte(xml))
 	if err != nil {
 		panic(err)
 	}

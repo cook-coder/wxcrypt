@@ -35,7 +35,7 @@ func TestWxBizMsgCrypt(t *testing.T) {
 		Token:  token,
 	}
 
-	eMap, err := c.EncryptMsg(string(jsonBytes), timeStamp, nonce)
+	eMap, err := c.EncryptMsg(jsonBytes, timeStamp, nonce)
 	if err != nil {
 		panic(err)
 	}
