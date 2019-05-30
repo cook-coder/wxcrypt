@@ -35,13 +35,15 @@ func TestWxBizMsgCrypt(t *testing.T) {
 		Token:  token,
 	}
 
-	eMap, err := c.EncryptMsg(jsonBytes, timeStamp, nonce)
+	encryptMsg, err := c.EncryptMsg(jsonBytes, timeStamp, nonce)
 	if err != nil {
 		panic(err)
 	}
-	t.Log(eMap)
+	t.Log(encryptMsg)
 
-	jBytes, err := c.DecryptMsg(eMap["MsgSignature"], timeStamp, nonce, eMap["Encrypt"])
+	sha1Sign := GetSHA1(token, timeStamp, nonce, encryptMsg)
+
+	jBytes, err := c.DecryptMsg(sha1Sign, timeStamp, nonce, encryptMsg)
 	if err != nil {
 		panic(err)
 	}
